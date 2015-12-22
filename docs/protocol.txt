@@ -1,0 +1,76 @@
+[[协议描述]]
+
+概述:
+    本协议使用HTTP协议为基础传输协议, 使用GET方法向服务器
+    传递信息, 返回结果在HTTP 200 OK的情况下, 会返回JSON对
+    象为自定义协议具体内容;
+
+字段描述:
+    load, cpu负载情况, 格式为: float,float,float
+    uptime, 系统运行时间, 格式为: integer, 单位: 秒
+    memtotal, 内存总量, 格式为: integer, 单位: KBytes
+    membuffer, 内存Buffer, 格式为: integer, 单位: KBytes
+    memfree, 内存空闲, 格式为: integer, 单位: KBytes
+    serverstat, 服务器链接状态, 取值: online | offline
+    message, 协议返回信息描述, 格式为: string
+    url, 网络地址, 格式为: string
+    ssid, Wifi AP名字, 格式为: string
+    password, Wifi连接密码, 格式为: string
+    ip, ip地址
+    nettype, 网络类型，格式为: string, 取值: wifi | wire(有线)
+    netmethod, 网络地址模式, 格式为: string, 取值: dhcp | static
+    netmask, 子网掩码, 格式为: IP地址
+    gateway, 网关, 格式为: IP地址
+    dns, 域名解析地址, 格式为: IP地址
+    serveraddr, 云服务地址, 格式为: string
+    netcheck, Internet链接情况查询, 取值: online | offline
+
+
+* setinfo
+描述:
+    配置设备的网络和云服务地址
+参数:
+    ssid: 无线链接AP名字;
+    password: 无线链接AP的密码;
+    nettype: 使用的网络类型, 取值: wifi | wire
+    netmethod: 使用的网络获取IP方法, 取值: dhcp | static
+    ip: IP地址
+    netmask: 子网掩码
+    gateway: 网关
+    dns: 域名解析IP
+	serveraddr: 云服务地址
+请求:
+    http://ip[:port]/cgi-bin/setinfo?ssid=[ssid]&password=[password]
+        &nettype＝<wifi|wire>&netmethod=<dhcp|static>&ip=[ip]
+        &netmask=[netmask]&gateway=[gateway]&dns=[dns]
+        &serveraddr=[serveraddr]
+返回:
+    {"result":"success|error","message":"MESSAGE"}
+
+
+* getnetstat
+描述:
+    获取设备网络状态
+参数:
+    无
+请求:
+    http://ip[:port]/cgi-bin/getnetstat
+返回:
+    {"result":"success|error", "message":"message",
+     "nettype":"wifi|wire", "netmethod": "dhcp|static",
+     "ip":"ip", "netmask": "netmask", "gateway": "gateway",
+     "dns": "dns", "netcheck":"online|offline"}
+
+
+* getdevstat
+描述:
+    获取设备状态, 包括运行时长, 内存情况, 负载情况, 云服务连接情况
+参数:
+	无
+请求:
+    http://ip[:port]/cgi-bin/getstat
+返回:
+    {"result":"success|error","message":"message", 
+     "load":"load", "uptime":"uptime", 
+     "memtotal":"memtotal", "membuffer":"membuffer", 
+     "memfree":"memfree", "serverstat":"online|offline"}
